@@ -6,13 +6,16 @@ import HeaderBar from './header-bar';
 import LandingPage from './landing-page';
 import Dashboard from './dashboard';
 import RegistrationPage from './registration-page';
-import { refreshAuthToken } from '../actions/auth';
+import { refreshAuthToken, idleToggle, clearAuth, buttonToggle } from '../actions/auth';
+import PopUp from './popup';
+
 
 export class App extends React.Component {
     componentDidUpdate(prevProps) {
         if (!prevProps.loggedIn && this.props.loggedIn) {
             // When we are logged in, refresh the auth token periodically
             this.startPeriodicRefresh();
+            // let isIdle = false;
         } else if (prevProps.loggedIn && !this.props.loggedIn) {
             // Stop refreshing when we log out
             this.stopPeriodicRefresh();
@@ -34,10 +37,17 @@ export class App extends React.Component {
         if (!this.refreshInterval) {
             return;
         }
-
+        // Some stuff I can start driving
         clearInterval(this.refreshInterval);
     }
 
+    // toggleIdle() {
+    //     console.log(this.props);
+    //     // let isIdle = false;
+    //     this.props.isIdle = !props.isIdle;
+    // }
+   
+    
     render() {
         return (
             <div className="app">
@@ -46,16 +56,18 @@ export class App extends React.Component {
                 <Route exact path="/" component={LandingPage} />
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route exact path="/register" component={RegistrationPage} />
-                <Idle timeout={240000} render={({ idle }) => <h1>
-                    {idle ? (<div>our notice modal and button goes here :)</div>) : undefined}</h1>} />
+                
             </div>
         );
+        // (<div>our notice modal and button goes here :</div>)
+        // Only display div if this. 
     }
 }
 // 240,000 = 4 minutes in seconds
 const mapStateToProps = state => ({
     hasAuthToken: state.auth.authToken !== null,
-    loggedIn: state.auth.currentUser !== null
+    loggedIn: state.auth.currentUser !== null,
+    isIdle : state.idle.isIdle
 });
 
 // Deal with update blocking - https://reacttraining.com/react-router/web/guides/dealing-with-update-blocking

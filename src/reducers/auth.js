@@ -10,7 +10,8 @@ const initialState = {
     authToken: null, // authToken !== null does not mean it has been validated
     currentUser: null,
     loading: false,
-    error: null
+    error: null,
+    isIdle : false
 };
 
 export default function reducer(state = initialState, action) {

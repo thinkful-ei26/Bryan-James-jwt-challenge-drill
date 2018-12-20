@@ -5,6 +5,14 @@ import {API_BASE_URL} from '../config';
 import {normalizeResponseErrors} from './utils';
 //import {saveAuthToken, clearAuthToken} from '../local-storage';// handles saving tok to local storage
 
+const initialState = {
+    authToken: null, // authToken !== null does not mean it has been validated
+    currentUser: null,
+    loading: false,
+    error: null,
+    isIdle : false
+};
+
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const setAuthToken = authToken => ({
     type: SET_AUTH_TOKEN,
@@ -31,6 +39,16 @@ export const AUTH_ERROR = 'AUTH_ERROR';
 export const authError = error => ({
     type: AUTH_ERROR,
     error
+});
+
+export const IDLE_TOGGLE = 'IDLE_TOGGLE';
+export const idleToggle = () => ({
+    type: IDLE_TOGGLE
+});
+
+export const BUTTON_TOGGLE = 'BUTTON_TOGGLE';
+export const buttonToggle = () => ({
+    type: BUTTON_TOGGLE
 });
 
 // Stores the auth token in state and localStorage, and decodes and stores
@@ -100,3 +118,23 @@ export const refreshAuthToken = () => (dispatch, getState) => {
            // clearAuthToken(authToken);//removes token from localstorage
         });
 };
+
+export const idleReducer = (state = initialState, action) => {
+    console.log("reducer is firing");
+    if (action.type === 'IDLE_TOGGLE') {
+        let newState = Object.assign({}, state, {
+            isIdle: true
+            });
+            console.log(newState);
+        return newState;
+    } else if (action.type === 'BUTTON_TOGGLE') {
+        let newState = Object.assign({}, state, {
+            isIdle: false
+            });
+            console.log(newState);
+        return newState;
+        } else { 
+            return state;
+        }
+};
+
