@@ -8,6 +8,8 @@ export class Dashboard extends React.Component {
         this.props.dispatch(fetchProtectedData());
     }
 
+// component life cycle method here for 10 minutes,
+
     render() {
         return (
             <div className="dashboard">

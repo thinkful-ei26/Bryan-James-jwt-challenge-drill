@@ -1,12 +1,12 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {Route, withRouter} from 'react-router-dom';
-
+import { connect } from 'react-redux';
+import { Route, withRouter } from 'react-router-dom';
+import Idle from 'react-idle';
 import HeaderBar from './header-bar';
 import LandingPage from './landing-page';
 import Dashboard from './dashboard';
 import RegistrationPage from './registration-page';
-import {refreshAuthToken} from '../actions/auth';
+import { refreshAuthToken } from '../actions/auth';
 
 export class App extends React.Component {
     componentDidUpdate(prevProps) {
@@ -26,7 +26,7 @@ export class App extends React.Component {
     startPeriodicRefresh() {
         this.refreshInterval = setInterval(
             () => this.props.dispatch(refreshAuthToken()),
-            60 * 60 * 1000 // One hour
+            60 * 10 * 1000 // One hour changed to 10 minutes
         );
     }
 
@@ -42,14 +42,17 @@ export class App extends React.Component {
         return (
             <div className="app">
                 <HeaderBar />
+
                 <Route exact path="/" component={LandingPage} />
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route exact path="/register" component={RegistrationPage} />
+                <Idle timeout={240000} render={({ idle }) => <h1>
+                    {idle ? (<div>our notice modal and button goes here :)</div>) : undefined}</h1>} />
             </div>
         );
     }
 }
-
+// 240,000 = 4 minutes in seconds
 const mapStateToProps = state => ({
     hasAuthToken: state.auth.authToken !== null,
     loggedIn: state.auth.currentUser !== null

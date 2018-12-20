@@ -3,7 +3,7 @@ import {SubmissionError} from 'redux-form';
 
 import {API_BASE_URL} from '../config';
 import {normalizeResponseErrors} from './utils';
-import {saveAuthToken, clearAuthToken} from '../local-storage';
+//import {saveAuthToken, clearAuthToken} from '../local-storage';// handles saving tok to local storage
 
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const setAuthToken = authToken => ({
@@ -37,9 +37,9 @@ export const authError = error => ({
 // the user data stored in the token
 const storeAuthInfo = (authToken, dispatch) => {
     const decodedToken = jwtDecode(authToken);
-    dispatch(setAuthToken(authToken));
+    dispatch(setAuthToken(authToken));//saves to state here.
     dispatch(authSuccess(decodedToken.user));
-    saveAuthToken(authToken);
+    // saveAuthToken(authToken);//this saves token into local storage
 };
 
 export const login = (username, password) => dispatch => {
@@ -97,6 +97,6 @@ export const refreshAuthToken = () => (dispatch, getState) => {
             // them and sign us out
             dispatch(authError(err));
             dispatch(clearAuth());
-            clearAuthToken(authToken);
+           // clearAuthToken(authToken);//removes token from localstorage
         });
 };
